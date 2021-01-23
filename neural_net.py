@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+from numpy import ndarray
 import matplotlib
 from ml_algorithms.data import spiral_data
 
@@ -51,6 +52,26 @@ class ActivationSoftmax:
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         probabilities = exp_values / np.sum(exp_values, axis=1, keepdims=True)
         self.output = probabilities
+
+    def loss(self, y):
+        """
+        Categorical cross-entropy loss function. Instead of optimising the NN for accuracy, it is more ideal to optimise
+        for confidence (using the probability distribution of the output instead of True/ False for the output neuron
+        with the highest confidence).
+        Categorical cross-entropy is the standard loss function for a softmax activation function on the output layer.
+
+        :param y: The one-hot-encoded label vector (the label category of a sample)
+        :type y: ndarray
+        :return: The calculated loss of the output of the NN for a sample
+        :rtype: float
+        """
+
+        loss = - sum(y * np.log(self.output))
+        self.loss = loss
+
+        return loss
+
+
 
 
 np.random.seed(0)
